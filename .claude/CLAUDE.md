@@ -56,3 +56,9 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 .\gradlew.bat :app:compileDebugKotlin --console=plain
 .\gradlew.bat :app:assembleDebug --console=plain
 .\gradlew.bat :core-logic:test :app:testDebugUnitTest
+
+## UI Test
+
+- Unless i ask you to, let me test it myself
+- Tell me exactly what to test
+

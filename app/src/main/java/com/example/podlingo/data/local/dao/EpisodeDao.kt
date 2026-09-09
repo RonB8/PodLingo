@@ -75,9 +75,6 @@ interface EpisodeDao {
     @Query("UPDATE episodes SET lastPlayedEpochMs = NULL WHERE id = :id")
     suspend fun clearLastPlayed(id: String)
 
-    @Query("UPDATE episodes SET startQuizCompleted = 1 WHERE id = :id")
-    suspend fun markStartQuizCompleted(id: String)
-
     @Query(
         """
         SELECT episodes.id AS id, episodes.title AS title, podcasts.title AS podcastTitle,

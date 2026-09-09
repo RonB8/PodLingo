@@ -49,8 +49,12 @@ fun PlaylistDetailScreen(
     EpisodeQuizHost(
         quiz = quiz,
         noUnknownWordsEvent = viewModel.noUnknownWordsEvent,
+        onTabSelected = viewModel::onQuizTabSelected,
         onAnswerSelected = viewModel::onQuizAnswerSelected,
-        onNext = viewModel::onQuizNext,
+        onSkip = viewModel::onQuizSkip,
+        onWordToggled = viewModel::onQuizWordToggled,
+        onSelectAllToggled = viewModel::onQuizSelectAllToggled,
+        onContinue = viewModel::onQuizContinue,
         onDismiss = viewModel::onQuizDismissed,
     )
 

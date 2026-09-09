@@ -7,6 +7,7 @@ import com.example.podlingo.data.local.dao.RecentlyPlayedPodcast
 import com.example.podlingo.data.repository.PodcastRepository
 import com.example.podlingo.ui.player.QuizSessionController
 import com.example.podlingo.ui.player.VocabQuizState
+import com.example.podlingo.ui.player.WordCheckTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.async
@@ -57,11 +58,21 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch { quizSessionController.start(episodeId) }
     }
 
+    fun onQuizTabSelected(tab: WordCheckTab) = quizSessionController.onTabSelected(tab)
+
     fun onQuizAnswerSelected(answer: String) {
         viewModelScope.launch { quizSessionController.onAnswerSelected(answer) }
     }
 
-    fun onQuizNext() = quizSessionController.onNext()
+    fun onQuizSkip() = quizSessionController.onSkip()
+
+    fun onQuizWordToggled(word: String) = quizSessionController.onWordToggled(word)
+
+    fun onQuizSelectAllToggled() = quizSessionController.onSelectAllToggled()
+
+    fun onQuizContinue() {
+        viewModelScope.launch { quizSessionController.onContinue() }
+    }
 
     fun onQuizDismissed() = quizSessionController.onDismissed()
 

@@ -81,10 +81,6 @@ class PodcastRepository @Inject constructor(
         episodeDao.updateLastPlayed(episodeId, System.currentTimeMillis())
     }
 
-    suspend fun markStartQuizCompleted(episodeId: String) {
-        episodeDao.markStartQuizCompleted(episodeId)
-    }
-
     fun getRecentlyPlayed(): Flow<List<RecentlyPlayedItem>> = episodeDao.getRecentlyPlayed()
 
     fun getRecentlyPlayedPodcasts(): Flow<List<RecentlyPlayedPodcast>> = episodeDao.getRecentlyPlayedPodcasts()

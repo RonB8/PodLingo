@@ -56,4 +56,7 @@ object AppDefaults {
 
     /** How long the start quiz holds each answer's right/wrong reveal before auto-advancing - long enough to register, short enough to stay quick. */
     const val START_QUIZ_AUTO_ADVANCE_DELAY_MS = 900L
+
+    /** Max height of a Word Check-style dialog's Simple-tab word list before it scrolls internally - keeps the header and Continue button on screen even for a long word list. */
+    const val WORD_CHECK_SIMPLE_TAB_MAX_HEIGHT_DP = 380
 }

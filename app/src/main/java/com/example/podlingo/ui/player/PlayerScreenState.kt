@@ -42,10 +42,8 @@ sealed interface PlayerScreenState {
         val translatingSentenceIds: Set<String> = emptySet(),
         /** A transient inline translation shown while an unknown word plays - see [PlayerViewModel]. */
         val translationPopup: WordTranslationPopup? = null,
-        /** True while the "review words you didn't know?" Yes/No prompt is showing after the episode ends. */
+        /** True while the "review words you didn't know?" Yes/No prompt is showing after the episode ends. Answering "yes" starts the end-of-episode quiz via [PlayerViewModel]'s [com.example.podlingo.ui.player.QuizSessionController] - its state is observed separately (see [PlayerViewModel.quiz]), not part of this state. */
         val quizPrompt: Boolean = false,
-        /** Non-null while the end-of-episode vocabulary quiz (offered after [quizPrompt]) is active. */
-        val quiz: VocabQuizState? = null,
         /** Non-null while the pre-episode "Word Check" assessment is open - see [PlayerViewModel.beginWordCheck]. Opens directly (no Yes/No gate) on a genuinely fresh start once there's anything left to assess. */
         val wordCheck: WordCheckState? = null,
         /** True while a Word Check tier is being built (translations fetched, questions assembled) but isn't ready to show yet - a large first tier can take a few seconds, and without this the screen would otherwise look frozen (no audio playing, no dialog yet). */

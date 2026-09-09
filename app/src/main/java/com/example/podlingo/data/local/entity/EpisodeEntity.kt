@@ -30,6 +30,6 @@ data class EpisodeEntity(
     val lastPlayedEpochMs: Long? = null,
     /** No longer read or written - kept only so the column stays in the existing schema without a migration. */
     val vocabCalibrated: Boolean = false,
-    /** Whether the pre-episode "Word Check" assessment has fully resolved every word for this episode - only true once nothing was left unanswered/skipped, so a decline or a partial pass offers it again (picking up just what's left) on the next fresh start. */
+    /** No longer read or written - kept only so the column stays in the existing schema without a migration. Word Check's outstanding-words check is always re-derived from live word-knowledge status instead (see PlayerViewModel.computeOutstandingWordTiers) - a cached "already assessed" flag went stale as soon as word-knowledge data changed afterwards (e.g. deleting words in Settings). */
     val startQuizCompleted: Boolean = false,
 )

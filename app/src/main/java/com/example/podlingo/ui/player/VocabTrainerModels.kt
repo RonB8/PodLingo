@@ -13,16 +13,25 @@ data class VocabQuizQuestion(
     val options: List<String>,
 )
 
+enum class WordCheckTab { QUIZ, SIMPLE }
+
+/**
+ * The end-of-episode/on-demand "Word Check" - same Quiz-tab/Simple-tab shape as [WordCheckState],
+ * just without tiers/cascading: [words] is this session's whole pool (an episode's flagged-unknown
+ * words), asked about once via whichever tab is active. See [QuizSessionController].
+ */
 data class VocabQuizState(
+    val tab: WordCheckTab,
+    val words: List<String>,
     val questions: List<VocabQuizQuestion>,
     val currentIndex: Int = 0,
-    val correctCount: Int = 0,
-    /** The option the user tapped for the current question, or null if not answered yet - drives the right/wrong reveal before "Next". */
+    /** The option the user tapped for the current question, or null if not answered yet - drives the right/wrong reveal before auto-advancing. */
     val answeredThisQuestion: String? = null,
-    val finished: Boolean = false,
+    /** Answered correctly via the Quiz tab - already marked known; renders read-only/green-checked in the Simple tab. */
+    val quizCorrectWords: Set<String> = emptySet(),
+    /** The Simple tab's "I don't know this" selection - seeded with words answered wrong in the Quiz tab, freely editable in either direction from there. */
+    val tapSelected: Set<String> = emptySet(),
 )
-
-enum class WordCheckTab { QUIZ, SIMPLE }
 
 /**
  * One tier of the merged pre-episode "Word Check" assessment - see [PlayerViewModel.beginWordCheck].

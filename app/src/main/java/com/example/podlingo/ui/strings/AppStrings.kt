@@ -172,11 +172,7 @@ interface AppStrings {
     val wordCheckSimpleTab: String
     val yes: String
     val no: String
-    val quizCompleteTitle: String
-    fun youGotXOutOfYRight(correct: Int, total: Int): String
     fun questionXOfY(index: Int, total: Int): String
-    val seeResults: String
-    val next: String
     val skip: String
     fun skipForwardSecondsContentDescription(seconds: Long): String
     fun skipBackSecondsContentDescription(seconds: Long): String
@@ -349,11 +345,7 @@ object EnglishStrings : AppStrings {
     override val wordCheckSimpleTab = "Simple"
     override val yes = "Yes"
     override val no = "No"
-    override val quizCompleteTitle = "Quiz complete!"
-    override fun youGotXOutOfYRight(correct: Int, total: Int) = "You got $correct out of $total right."
     override fun questionXOfY(index: Int, total: Int) = "Question $index/$total"
-    override val seeResults = "See results"
-    override val next = "Next"
     override val skip = "Skip"
     override fun skipForwardSecondsContentDescription(seconds: Long) = "Skip forward $seconds seconds"
     override fun skipBackSecondsContentDescription(seconds: Long) = "Skip back $seconds seconds"
@@ -523,11 +515,7 @@ object HebrewStrings : AppStrings {
     override val wordCheckSimpleTab = "פשוט"
     override val yes = "כן"
     override val no = "לא"
-    override val quizCompleteTitle = "החידון הושלם!"
-    override fun youGotXOutOfYRight(correct: Int, total: Int) = "ענית נכון על $correct מתוך $total."
     override fun questionXOfY(index: Int, total: Int) = "שאלה $index מתוך $total"
-    override val seeResults = "הצגת התוצאות"
-    override val next = "הבא"
     override val skip = "דילוג"
     override fun skipForwardSecondsContentDescription(seconds: Long) = "קפיצה קדימה ב-$seconds שניות"
     override fun skipBackSecondsContentDescription(seconds: Long) = "קפיצה אחורה ב-$seconds שניות"

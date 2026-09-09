@@ -53,10 +53,6 @@ class FakeEpisodeDao : EpisodeDao {
         episodes.update { list -> list.map { if (it.id == id) it.copy(lastPlayedEpochMs = null) else it } }
     }
 
-    override suspend fun markStartQuizCompleted(id: String) {
-        episodes.update { list -> list.map { if (it.id == id) it.copy(startQuizCompleted = true) else it } }
-    }
-
     override fun getRecentlyPlayed(): Flow<List<RecentlyPlayedItem>> = episodes.map { list ->
         list.filter { it.lastPlayedEpochMs != null }
             .sortedByDescending { it.lastPlayedEpochMs }

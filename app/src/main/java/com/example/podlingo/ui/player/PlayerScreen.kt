@@ -12,14 +12,11 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -108,8 +105,9 @@ import com.example.podlingo.player.PlayerUiState
 import com.example.podlingo.ui.playlists.AddToPlaylistDialog
 import com.example.podlingo.ui.strings.AppStrings
 import com.example.podlingo.ui.strings.LocalAppStrings
+import com.example.podlingo.ui.vocabulary.EpisodeQuizHost
 import com.example.podlingo.ui.vocabulary.QuizQuestionOptions
-import com.example.podlingo.ui.vocabulary.VocabQuizDialog
+import com.example.podlingo.ui.vocabulary.WordCheckSimpleTabContent
 import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -160,14 +158,18 @@ fun PlayerScreen(
             onAnswer = viewModel::onQuizPromptAnswer,
         )
     }
-    readyState?.quiz?.let { quiz ->
-        VocabQuizDialog(
-            quiz = quiz,
-            onAnswerSelected = viewModel::onQuizAnswerSelected,
-            onNext = viewModel::onQuizNext,
-            onDismiss = viewModel::onQuizDismissed,
-        )
-    }
+    val quiz by viewModel.quiz.collectAsStateWithLifecycle()
+    EpisodeQuizHost(
+        quiz = quiz,
+        noUnknownWordsEvent = viewModel.noUnknownWordsEvent,
+        onTabSelected = viewModel::onQuizTabSelected,
+        onAnswerSelected = viewModel::onQuizAnswerSelected,
+        onSkip = viewModel::onQuizSkip,
+        onWordToggled = viewModel::onQuizWordToggled,
+        onSelectAllToggled = viewModel::onQuizSelectAllToggled,
+        onContinue = viewModel::onQuizContinue,
+        onDismiss = viewModel::onQuizDismissed,
+    )
 
     Scaffold(
         modifier = Modifier
@@ -1109,64 +1111,14 @@ private fun WordCheckSimpleTab(
     onSelectAllToggled: () -> Unit,
     onContinue: () -> Unit,
 ) {
-    val strings = LocalAppStrings.current
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = strings.doYouKnowTheseWordsTitle,
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Text(
-            text = strings.tapWordsExplanation,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
-        )
-        val toggleable = wordCheck.words - wordCheck.quizCorrectWords
-        TextButton(onClick = onSelectAllToggled, modifier = Modifier.align(Alignment.End)) {
-            Text(if (toggleable.isNotEmpty() && wordCheck.tapSelected.containsAll(toggleable)) strings.deselectAll else strings.selectAll)
-        }
-        // Capped and independently scrollable so a long word list can never push the Continue
-        // button itself off-screen - the header and button always stay put.
-        FlowRow(
-            modifier = Modifier
-                .heightIn(max = CALIBRATION_WORD_LIST_MAX_HEIGHT_DP.dp)
-                .verticalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            wordCheck.words.forEach { word ->
-                if (word in wordCheck.quizCorrectWords) {
-                    // Already answered correctly in the Quiz tab - shown resolved, not tappable.
-                    AssistChip(
-                        onClick = {},
-                        enabled = false,
-                        leadingIcon = { Icon(Icons.Filled.Check, contentDescription = null) },
-                        label = { Text(word) },
-                        colors = AssistChipDefaults.assistChipColors(
-                            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            disabledLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            disabledLeadingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        ),
-                    )
-                } else {
-                    FilterChip(
-                        // Pre-selected if it was answered wrong in the Quiz tab, same as if the user
-                        // had tapped it here - still freely editable either way from this tab.
-                        selected = word in wordCheck.tapSelected,
-                        onClick = { onWordToggled(word) },
-                        label = { Text(word) },
-                    )
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick = onContinue, modifier = Modifier.fillMaxWidth()) {
-            Text(strings.continueLabel)
-        }
-    }
+    WordCheckSimpleTabContent(
+        words = wordCheck.words,
+        quizCorrectWords = wordCheck.quizCorrectWords,
+        tapSelected = wordCheck.tapSelected,
+        onWordToggled = onWordToggled,
+        onSelectAllToggled = onSelectAllToggled,
+        onContinue = onContinue,
+    )
 }
 
 @Composable
@@ -1217,5 +1169,3 @@ private const val SWIPE_DISMISS_THRESHOLD_DP = 96
 private const val FLING_DISMISS_VELOCITY_PX_PER_S = 1200f
 
 private const val TRANSLATION_POPUP_DURATION_MS = 3500L
-
-private const val CALIBRATION_WORD_LIST_MAX_HEIGHT_DP = 380

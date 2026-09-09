@@ -43,6 +43,20 @@ class WordDifficultyRankerTest {
     }
 
     @Test
+    fun `drops single-letter tokens, whether real words or transcription artifacts`() {
+        val words = listOf(
+            WordTiming("e", 0, 50, "s1"),
+            WordTiming("o", 50, 100, "s1"),
+            WordTiming("a", 100, 150, "s1"),
+            WordTiming("cat", 150, 250, "s1"),
+        )
+
+        val ordered = orderHardestFirst(words)
+
+        assertEquals(listOf("cat"), ordered.map { it.word })
+    }
+
+    @Test
     fun `drops capitalized unrecognized words as names, wherever they fall in the sentence`() {
         // "Ram" and "Israeli" are capitalized and unranked (rank 5) -> dropped as names. "Samaria"
         // is too, even though it's the *first* word here - transcripts are chunked into segments

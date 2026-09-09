@@ -3,6 +3,7 @@ package com.example.podlingo.data.repository
 import android.content.Context
 import com.example.podlingo.core.ElementaryFunctionWords
 import com.example.podlingo.core.EnglishStemmer
+import com.example.podlingo.core.IrregularVerbForms
 import com.example.podlingo.core.WordNormalizer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -25,6 +26,12 @@ import javax.inject.Singleton
  * inflected. Left unhandled, the single most common words in English would rank as the hardest
  * ones in a sentence. [ElementaryFunctionWords] short-circuits that closed, finite set to the
  * easiest rank before either lookup runs.
+ *
+ * The same "irregular, not inflected" gap applies beyond that closed set: an irregular verb's
+ * past tense/participle ("gone", "went", "seen", "took") doesn't share a stem with its base form,
+ * so [EnglishStemmer] can't derive it either. [IrregularVerbForms] is tried as a last resort,
+ * after the literal lookup and the stemmer's candidates have both missed, mapping the inflected
+ * spelling to its base form and ranking by that base form's Oxford level.
  */
 @Singleton
 class WordDifficultyRepository @Inject constructor(@ApplicationContext private val context: Context) {
@@ -39,6 +46,9 @@ class WordDifficultyRepository @Inject constructor(@ApplicationContext private v
         levelRankByWord[normalized]?.let { return it }
         for (candidate in EnglishStemmer.candidateBaseForms(normalized)) {
             levelRankByWord[candidate]?.let { return it }
+        }
+        IrregularVerbForms.baseFormOf(normalized)?.let { base ->
+            levelRankByWord[base]?.let { return it }
         }
         return UNKNOWN_RANK
     }

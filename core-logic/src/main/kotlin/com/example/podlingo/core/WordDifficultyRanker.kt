@@ -11,7 +11,12 @@ object WordDifficultyRanker {
      * [rankOf] returns a word's difficulty rank; lower is easier, and callers should give
      * unrecognized words the highest rank (per the difficulty source's own contract that "not
      * found" means hardest). [isKnownWord] reports whether the word is in the difficulty source's
-     * vocabulary at all - see below. Words with no letters (stray punctuation tokens) are dropped.
+     * vocabulary at all - see below. Words with fewer than two letters are dropped: that covers
+     * stray punctuation tokens as well as single-letter tokens ("e", "o") that transcription
+     * artifacts occasionally produce - too little content to meaningfully translate, and not worth
+     * scoring as "hardest" just because a one-letter token is never in the Oxford lists. Genuine
+     * one-letter words ("a", "I") are always elementary anyway, so dropping them from the
+     * candidate pool never changes which word would have been picked as hardest.
      * Ties keep their original sentence order.
      *
      * Names are never eligible: a proper noun is almost never in the Oxford lists, so it would
@@ -30,7 +35,7 @@ object WordDifficultyRanker {
         isKnownWord: (String) -> Boolean,
     ): List<WordTiming> =
         words
-            .filter { it.word.any(Char::isLetter) }
+            .filter { it.word.count(Char::isLetter) >= 2 }
             .withIndex()
             .filterNot { (_, word) -> looksLikeProperNoun(word.word) && !isKnownWord(word.word) }
             .sortedWith(

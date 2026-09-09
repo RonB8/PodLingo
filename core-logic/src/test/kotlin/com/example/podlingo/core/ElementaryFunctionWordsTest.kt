@@ -19,6 +19,13 @@ class ElementaryFunctionWordsTest {
     }
 
     @Test
+    fun `recognizes contracted spellings no stemmer or irregular-verb table could derive`() {
+        for (word in listOf("wouldn't", "can't", "isn't", "don't", "won't", "i'll", "they've", "it's")) {
+            assertTrue(word, ElementaryFunctionWords.contains(word))
+        }
+    }
+
+    @Test
     fun `does not claim genuine content words`() {
         for (word in listOf("freedom", "religion", "consistent", "abrogate", "number")) {
             assertFalse(word, ElementaryFunctionWords.contains(word))

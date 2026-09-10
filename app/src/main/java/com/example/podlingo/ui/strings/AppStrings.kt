@@ -170,6 +170,9 @@ interface AppStrings {
     val wordCheckTitle: String
     val wordCheckQuizTab: String
     val wordCheckSimpleTab: String
+    val vocabReviewTitle: String
+    val vocabReviewSimpleTab: String
+    val vocabReviewSimpleTabHeader: String
     val yes: String
     val no: String
     fun questionXOfY(index: Int, total: Int): String
@@ -333,16 +336,19 @@ object EnglishStrings : AppStrings {
     override val autoTranslateChip = "Auto translate"
     override val showTranslationsChip = "Show translations"
     override val noRelevantSentenceMessage = "No relevant sentence found (that pause looks like it fell in a quiet stretch)."
-    override val doYouKnowTheseWordsTitle = "Do you know these words?"
+    override val doYouKnowTheseWordsTitle = "Find the words you don't know"
     override val tapWordsExplanation = "Tap any word you don't know - it'll translate automatically when it comes up."
     override val selectAll = "Select all"
     override val deselectAll = "Deselect all"
     override val continueLabel = "Continue"
     override val reviewWhatYouLearnedTitle = "Review what you learned?"
     override val wantToTryQuizText = "Want to try a quick quiz on the words you didn't know in this episode?"
-    override val wordCheckTitle = "Word Check"
-    override val wordCheckQuizTab = "Quiz"
-    override val wordCheckSimpleTab = "Simple"
+    override val wordCheckTitle = "Get ready for the episode"
+    override val wordCheckQuizTab = "Test yourself"
+    override val wordCheckSimpleTab = "Find new words"
+    override val vocabReviewTitle = "Word Review"
+    override val vocabReviewSimpleTab = "Check words"
+    override val vocabReviewSimpleTabHeader = "Mark the words you still don't know"
     override val yes = "Yes"
     override val no = "No"
     override fun questionXOfY(index: Int, total: Int) = "Question $index/$total"
@@ -503,16 +509,19 @@ object HebrewStrings : AppStrings {
     override val autoTranslateChip = "תרגום אוטומטי"
     override val showTranslationsChip = "הצג תרגומים"
     override val noRelevantSentenceMessage = "לא נמצא משפט רלוונטי (נראה שההשהיה הזו הייתה בקטע שקט)."
-    override val doYouKnowTheseWordsTitle = "האם המילים האלה מוכרות לך?"
+    override val doYouKnowTheseWordsTitle = "מצא/י את המילים שאינך מכיר/ה"
     override val tapWordsExplanation = "יש להקיש על כל מילה שאינך מכיר/ה - היא תתורגם אוטומטית כשהיא תופיע."
     override val selectAll = "בחירת הכול"
     override val deselectAll = "ביטול בחירת הכול"
     override val continueLabel = "המשך"
     override val reviewWhatYouLearnedTitle = "לסקור את מה שלמדת?"
     override val wantToTryQuizText = "לנסות חידון קצר על המילים שלא הכרת בפרק הזה?"
-    override val wordCheckTitle = "בדיקת מילים"
-    override val wordCheckQuizTab = "חידון"
-    override val wordCheckSimpleTab = "פשוט"
+    override val wordCheckTitle = "הכנה לפרק"
+    override val wordCheckQuizTab = "בחן/י את עצמך"
+    override val wordCheckSimpleTab = "מצא/י מילים חדשות"
+    override val vocabReviewTitle = "סקירת מילים"
+    override val vocabReviewSimpleTab = "בדיקת מילים"
+    override val vocabReviewSimpleTabHeader = "סמן/י את המילים שעדיין אינך מכיר/ה"
     override val yes = "כן"
     override val no = "לא"
     override fun questionXOfY(index: Int, total: Int) = "שאלה $index מתוך $total"

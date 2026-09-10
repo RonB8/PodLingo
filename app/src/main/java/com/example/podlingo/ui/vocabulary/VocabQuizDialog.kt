@@ -42,12 +42,13 @@ import com.example.podlingo.ui.player.WordCheckTab
 import com.example.podlingo.ui.strings.LocalAppStrings
 
 /**
- * The end-of-episode/on-demand "Word Check" - a Quiz tab (multiple choice, reusing
+ * The end-of-episode/on-demand "Word Review" - a Quiz tab (multiple choice, reusing
  * [QuizQuestionOptions]) and a Simple tab (tap the words you don't know), both working through the
  * same word pool - see [VocabQuizState]. Shared between the end-of-episode quiz prompt in the
  * player and every episode-list screen's on-demand "Quiz" menu item via [EpisodeQuizHost]. Same
  * shape as the pre-episode Word Check panel in [com.example.podlingo.ui.player.PlayerScreen], just
- * without cascading difficulty tiers.
+ * without cascading difficulty tiers - titled and worded differently, though, since this is a
+ * review of words already flagged during listening, not a pre-episode assessment of new ones.
  */
 @Composable
 fun VocabQuizDialog(
@@ -69,7 +70,7 @@ fun VocabQuizDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(strings.wordCheckTitle, style = MaterialTheme.typography.titleLarge)
+                    Text(strings.vocabReviewTitle, style = MaterialTheme.typography.titleLarge)
                     IconButton(onClick = onDismiss) {
                         Icon(Icons.Filled.Close, contentDescription = strings.dismiss)
                     }
@@ -83,13 +84,14 @@ fun VocabQuizDialog(
                     Tab(
                         selected = quiz.tab == WordCheckTab.SIMPLE,
                         onClick = { onTabSelected(WordCheckTab.SIMPLE) },
-                        text = { Text(strings.wordCheckSimpleTab) },
+                        text = { Text(strings.vocabReviewSimpleTab) },
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 when (quiz.tab) {
                     WordCheckTab.QUIZ -> VocabQuizTab(quiz, onAnswerSelected, onSkip)
                     WordCheckTab.SIMPLE -> WordCheckSimpleTabContent(
+                        headerTitle = strings.vocabReviewSimpleTabHeader,
                         words = quiz.words,
                         quizCorrectWords = quiz.quizCorrectWords,
                         tapSelected = quiz.tapSelected,
@@ -173,10 +175,13 @@ fun QuizQuestionOptions(
 /**
  * The Simple tab shared by every Word Check-style dialog (the pre-episode assessment and this
  * on-demand/end-of-episode quiz) - tap the words you don't know, with words already answered
- * correctly in a Quiz tab shown resolved/read-only.
+ * correctly in a Quiz tab shown resolved/read-only. [headerTitle] differs per call site: the
+ * pre-episode assessment frames this as finding new words before listening, while the
+ * end-of-episode/on-demand review frames it as confirming words already flagged during listening.
  */
 @Composable
 fun WordCheckSimpleTabContent(
+    headerTitle: String,
     words: List<String>,
     quizCorrectWords: Set<String>,
     tapSelected: Set<String>,
@@ -187,7 +192,7 @@ fun WordCheckSimpleTabContent(
     val strings = LocalAppStrings.current
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text = strings.doYouKnowTheseWordsTitle,
+            text = headerTitle,
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),

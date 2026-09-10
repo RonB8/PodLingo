@@ -1111,7 +1111,9 @@ private fun WordCheckSimpleTab(
     onSelectAllToggled: () -> Unit,
     onContinue: () -> Unit,
 ) {
+    val strings = LocalAppStrings.current
     WordCheckSimpleTabContent(
+        headerTitle = strings.doYouKnowTheseWordsTitle,
         words = wordCheck.words,
         quizCorrectWords = wordCheck.quizCorrectWords,
         tapSelected = wordCheck.tapSelected,

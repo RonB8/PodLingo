@@ -2,7 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="11">
-      <module name="PodLearn.app" target="21" />
+      <module name="PodLingo.app" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
